@@ -2,9 +2,21 @@ import type { Metadata } from "next";
 import { Inter, Dancing_Script, Pacifico } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
-const dancingScript = Dancing_Script({ subsets: ["latin"] });
-const pacifico = Pacifico({ weight: '400', subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+});
+
+const dancingScript = Dancing_Script({
+  subsets: ["latin"],
+  variable: "--font-dancing",
+});
+
+const pacifico = Pacifico({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-pacifico",
+});
 
 export const metadata: Metadata = {
   title: "Valentine Link Creator",
@@ -18,7 +30,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-pink-50 text-slate-800`}>
+      <body
+        className={`
+          ${inter.variable}
+          ${dancingScript.variable}
+          ${pacifico.variable}
+          bg-pink-50
+          text-slate-800
+        `}
+      >
         {children}
       </body>
     </html>

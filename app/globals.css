@@ -1,5 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400;600&display=swap");
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --pink: #ff5fa2;
   --dark: #1f1f1f;
@@ -57,7 +61,8 @@ button.secondary {
   border: 2px solid var(--pink);
 }
 
-input, textarea {
+input,
+textarea {
   width: 100%;
   padding: 12px;
   border-radius: 12px;
@@ -80,4 +85,26 @@ input {
 label {
   color: #444;
   font-weight: 500;
+}
+textarea {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  border: 2px solid #ff5fa2;
+  background: #fff;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.add-line-btn {
+  background: white;
+  color: #ff5fa2;
+  border: 2px solid #ff5fa2;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.add-line-btn:hover {
+  background: #fff0f6;
 }

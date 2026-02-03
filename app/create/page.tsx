@@ -98,10 +98,7 @@ export default function CreatePage() {
       formData.append("remove_defaults_no", removeDefaultsNo.toString());
       formData.append("remove_defaults_conf", removeDefaultsConf.toString());
 
-      // Pre-process Lists: 
-      // If "Remove Defaults" is ON, we send exactly what user typed (filtering empties).
-      // If "Remove Defaults" is OFF, we fill blanks with hints logic for better UX.
-      
+      // Pre-process Lists
       const processedNo = answersNo.map((text, index) => {
         if ((!text || text.trim() === "") && !removeDefaultsNo) {
           const def = DEFAULT_NO_ANSWERS[index] || "Please?";
@@ -140,48 +137,48 @@ export default function CreatePage() {
     <div className="min-h-screen bg-[#fff0f6] py-10 px-4 font-sans text-slate-800">
       <div className="max-w-3xl mx-auto space-y-8">
         
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-[#ff5fa2] drop-shadow-sm font-serif">
+        <div className="text-center space-y-3 mb-2">
+          <h1 className="text-5xl md:text-6xl font-extrabold text-[#ff5fa2] drop-shadow-sm font-serif leading-tight">
             Customize Your Valentine 💖
           </h1>
-          <p className="text-slate-600">Make it personal, funny, and cute!</p>
+          <p className="text-lg text-slate-600 font-medium">Make it personal, funny, and cute!</p>
         </div>
 
         {/* SECTION 1: DETAILS */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-pink-100 space-y-6">
-          <h2 className="text-2xl font-bold text-slate-700 border-b pb-2">1. The Basics</h2>
+        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-6">
+          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">1. The Basics</h2>
           <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="block text-sm font-semibold text-slate-600 mb-1">Partner's Name</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-slate-600">Partner's Name</label>
               <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Shrija" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition"/>
             </div>
-            <div>
-              <label className="block text-sm font-semibold text-slate-600 mb-1">Page Title</label>
+            <div className="space-y-2">
+              <label className="block text-sm font-semibold text-slate-600">Page Title</label>
               <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Default: I love you" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition"/>
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-semibold text-slate-600 mb-1">Success Message</label>
-            <textarea value={successMessage} onChange={e => setSuccessMessage(e.target.value)} placeholder="Default: Yippeee I Loveeee youuuuuuuuuuuuuu 🌹" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition h-24"/>
+          <div className="space-y-2">
+            <label className="block text-sm font-semibold text-slate-600">Success Message</label>
+            <textarea value={successMessage} onChange={e => setSuccessMessage(e.target.value)} placeholder="Default: Yippeee I Loveeee youuuuuuuuuuuuuu 🌹" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition h-24 resize-none"/>
           </div>
         </div>
 
         {/* SECTION 2: MESSAGES */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-pink-100 space-y-8">
-          <h2 className="text-2xl font-bold text-slate-700 border-b pb-2">2. Custom Messages</h2>
+        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-8">
+          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">2. Custom Messages</h2>
           
           {/* NO MESSAGES */}
           <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
               <label className="text-lg font-bold text-red-500">"No" Button Messages 😢</label>
               
               {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1 rounded-full border border-red-100 hover:bg-red-100 transition">
-                <input 
-                  type="checkbox" 
-                  checked={removeDefaultsNo} 
+              <label className="flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1.5 rounded-full border border-red-100 hover:bg-red-100 transition">
+                <input
+                  type="checkbox"
+                  checked={removeDefaultsNo}
                   onChange={e => setRemoveDefaultsNo(e.target.checked)}
-                  className="accent-red-500 w-4 h-4"
+                  className="w-4 h-4 accent-red-500"
                 />
                 <span className="text-xs font-semibold text-red-600">Remove Default Strings (Use only mine)</span>
               </label>
@@ -189,28 +186,38 @@ export default function CreatePage() {
             
             <div className="space-y-3">
               {answersNo.map((text, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <span className="text-xs text-gray-400 w-6 font-mono text-center">{index + 1}.</span>
+                <div key={index} className="relative w-full">
                   <input
+                    type="text"
                     value={text}
                     onChange={(e) => handleNoChange(index, e.target.value)}
+                    className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-12 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition"
                     placeholder={getPlaceholder(DEFAULT_NO_ANSWERS, index)}
-                    className="flex-1 p-3 border border-gray-200 rounded-xl focus:border-red-400 focus:ring-2 focus:ring-red-100 outline-none"
                   />
-                  <button onClick={() => removeNoField(index)} className="p-3 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-xl">✕</button>
+
+                  {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
+                  <button
+                    onClick={() => removeNoField(index)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md z-10"
+                    title="Remove field"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
               ))}
-              <button onClick={addNoField} className="text-sm text-red-500 font-bold hover:underline">+ Add Line</button>
+              <button onClick={addNoField} className="add-line-btn text-sm text-pink-500 font-bold hover:underline">+ Add Line</button>
             </div>
           </div>
 
           {/* CONFIRMATION MESSAGES */}
           <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-2">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
               <label className="text-lg font-bold text-green-600">Confirmation Steps 🥺</label>
               
               {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-green-50 px-3 py-1 rounded-full border border-green-100 hover:bg-green-100 transition">
+              <label className="flex items-center gap-2 cursor-pointer bg-green-50 px-3 py-1.5 rounded-full border border-green-100 hover:bg-green-100 transition">
                 <input 
                   type="checkbox" 
                   checked={removeDefaultsConf} 
@@ -223,42 +230,54 @@ export default function CreatePage() {
 
             <div className="space-y-3">
               {confirmations.map((text, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                   <span className="text-xs text-gray-400 w-6 font-mono text-center">{index + 1}.</span>
-                  <input
-                    value={text}
-                    onChange={(e) => handleConfChange(index, e.target.value)}
-                    placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
-                    className="flex-1 p-3 border border-gray-200 rounded-xl focus:border-green-400 focus:ring-2 focus:ring-green-100 outline-none"
-                  />
-                  <button onClick={() => removeConfField(index)} className="p-3 text-green-400 hover:text-green-600 hover:bg-green-50 rounded-xl">✕</button>
+                <div key={index} className="flex gap-3 items-center">
+                   <span className="text-xs text-gray-400 font-mono text-center min-w-[1.5rem]">{index + 1}.</span>
+                  <div className="relative flex-1">
+                    <input
+                      value={text}
+                      onChange={(e) => handleConfChange(index, e.target.value)}
+                      placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
+                      className="w-full p-3 pr-12 border border-gray-300 rounded-xl focus:border-green-400 focus:ring-2 focus:ring-green-100 outline-none transition"
+                    />
+                    
+                    {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
+                    <button 
+                      onClick={() => removeConfField(index)} 
+                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md z-10"
+                      title="Remove step"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
               ))}
-              <button onClick={addConfField} className="text-sm text-green-600 font-bold hover:underline">+ Add Step</button>
+              <button onClick={addConfField} className="add-line-btn text-sm text-green-500 font-bold hover:underline">+ Add Step</button>
             </div>
           </div>
         </div>
 
         {/* SECTION 3: IMAGES */}
-        <div className="bg-white p-6 rounded-2xl shadow-xl border border-pink-100 space-y-6">
-          <h2 className="text-2xl font-bold text-slate-700 border-b pb-2">3. Upload Images (Optional)</h2>
+        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-6">
+          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">3. Upload Images (Optional)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-600">Mid/Start Bear</label>
-              <input type="file" onChange={e => setMidBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100"/>
+            <div className="space-y-3 flex flex-col">
+              <label className="block text-sm font-semibold text-slate-600">Mid/Start Bear 🐻</label>
+              <input type="file" onChange={e => setMidBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-pink-50 file:text-pink-700 file:font-medium hover:file:bg-pink-100 transition cursor-pointer flex-1"/>
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-600">Yes Bear</label>
-              <input type="file" onChange={e => setYesBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-50 file:text-green-700 hover:file:bg-green-100"/>
+            <div className="space-y-3 flex flex-col">
+              <label className="block text-sm font-semibold text-slate-600">Yes Bear ✅</label>
+              <input type="file" onChange={e => setYesBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-50 file:text-green-700 file:font-medium hover:file:bg-green-100 transition cursor-pointer flex-1"/>
             </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-medium text-slate-600">No Bear</label>
-              <input type="file" onChange={e => setNoBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-red-50 file:text-red-700 hover:file:bg-red-100"/>
+            <div className="space-y-3 flex flex-col">
+              <label className="block text-sm font-semibold text-slate-600">No Bear ❌</label>
+              <input type="file" onChange={e => setNoBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-red-50 file:text-red-700 file:font-medium hover:file:bg-red-100 transition cursor-pointer flex-1"/>
             </div>
           </div>
         </div>
 
-        <button onClick={handleSubmit} disabled={loading} className="w-full bg-[#ff5fa2] hover:bg-[#e04f8e] text-white font-bold text-xl py-5 rounded-full shadow-lg transition-all transform hover:-translate-y-1">
+        <button onClick={handleSubmit} disabled={loading} className="w-full bg-gradient-to-r from-[#ff5fa2] to-[#ff7fb5] hover:from-[#e04f8e] hover:to-[#e6709f] text-white font-bold text-xl py-4 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 disabled:opacity-75 disabled:cursor-not-allowed">
           {loading ? "Generating Your Link..." : "Create Link 🚀"}
         </button>
       </div>
