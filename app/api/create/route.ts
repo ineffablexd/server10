@@ -159,7 +159,7 @@ export async function POST(req: Request) {
       const fileName = `${renameTo}.gif`; 
       
       fs.writeFileSync(path.join(imageDir, fileName), buffer);
-      return [`images/${fileName}`]; 
+      return [`public/images/${fileName}`]; 
     }
 
     const bannerMid = await resolveImages(midFile, "mid", DEFAULTS.images.banner_mid);

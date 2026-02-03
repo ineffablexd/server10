@@ -1,31 +1,31 @@
 {
   "title": "I love you",
-  "question_heading": "test, Will you be my valentine? 🌹",
+  "question_heading": "jh, Will you be my valentine? 🌹",
   "no_button": "No",
   "yes_button": "Yes 💖",
   "success_message": "Yippeee I Loveeee youuuuuuuuuuuuuu 🌹🌹🌹🌹🌹",
   "creator_text": "Created with Valentinelinks;)",
   "creator_link": "https://github.com/ineffablexd",
   "answers_no": [
-    "No, test 😔",
-    "Are you sure, test?",
-    "Really sure, test? 🥺",
-    "Like… super duper sure, test?",
-    "Think once more, test 💭",
-    "test believes in second chances, you know ✨",
-    "Why so cold, test ❄️",
-    "Can we talk it out, test? 💬",
-    "I won’t ask again, test… maybe 🙈",
-    "Oof, that hurt a little, test 💔",
-    "Okay now you’re being mean, test 😤",
-    "Why are you doing this to me, test 😢",
-    "Please give me a chance, test 🫶",
-    "I’m begging you, test 😭",
-    "Please stop, test 🥹",
-    "Okay… let’s start over, test 💖"
+    "No, jh 😔",
+    "Are you sure, jh?",
+    "Really sure, jh? 🥺",
+    "Like… super duper sure, jh?",
+    "Think once more, jh 💭",
+    "jh believes in second chances, you know ✨",
+    "Why so cold, jh ❄️",
+    "Can we talk it out, jh? 💬",
+    "I won’t ask again, jh… maybe 🙈",
+    "Oof, that hurt a little, jh 💔",
+    "Okay now you’re being mean, jh 😤",
+    "Why are you doing this to me, jh 😢",
+    "Please give me a chance, jh 🫶",
+    "I’m begging you, jh 😭",
+    "Please stop, jh 🥹",
+    "Okay… let’s start over, jh 💖"
   ],
   "confirmation_messages": [
-    "Pakka na? 🤨",
+    "hj",
     "Are you sure u love me? 🥺",
     "Lock kar diya jaye? 🔒",
     "Pinky promise? 🤙"
@@ -85,15 +85,7 @@
       "public/images/yes9.gif"
     ],
     "banner_mid": [
-      "public/images/mid.gif",
-      "public/images/mid2.gif",
-      "public/images/mid3.gif",
-      "public/images/mid4.gif",
-      "public/images/mid5.gif",
-      "public/images/mid6.gif",
-      "public/images/mid7.gif",
-      "public/images/mid8.gif",
-      "public/images/mid9.gif"
+      "images/mid.gif"
     ]
   }
 }
