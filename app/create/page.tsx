@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import DeleteIconSrc from "./delete.svg";
 
 // --- DEFAULT DATA FOR HINTS ---
 const DEFAULT_NO_ANSWERS = [
@@ -125,7 +126,7 @@ export default function CreatePage() {
       const res = await fetch("/api/create", { method: "POST", body: formData });
       if (!res.ok) throw new Error("Failed");
       const data = await res.json();
-      router.push(`/valentine/${data.userId}`);
+      router.push(`/pay/${data.userId}`);
     } catch (e) {
       console.error(e);
       alert("Error creating link");
@@ -170,15 +171,15 @@ export default function CreatePage() {
           {/* NO MESSAGES */}
           <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
-              <label className="text-lg font-bold text-red-500">"No" Button Messages 😢</label>
+              <label className="text-lg font-bold text-red-500">"No" Button  Clicked Messages 😢</label>
               
               {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1.5 rounded-full border border-red-100 hover:bg-red-100 transition">
+              <label className="flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1.5 rounded-full border border-red-100 hover:bg-red-100 transition pt-2">
                 <input
                   type="checkbox"
                   checked={removeDefaultsNo}
                   onChange={e => setRemoveDefaultsNo(e.target.checked)}
-                  className="w-4 h-4 accent-red-500"
+                  className="w-5 h-5 accent-red-500 rounded-md"
                 />
                 <span className="text-xs font-semibold text-red-600">Remove Default Strings (Use only mine)</span>
               </label>
@@ -186,24 +187,22 @@ export default function CreatePage() {
             
             <div className="space-y-3">
               {answersNo.map((text, index) => (
-                <div key={index} className="relative w-full">
+                <div key={index} className="flex gap-2 items-center">
                   <input
                     type="text"
                     value={text}
                     onChange={(e) => handleNoChange(index, e.target.value)}
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 pr-12 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition"
+                    className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition"
                     placeholder={getPlaceholder(DEFAULT_NO_ANSWERS, index)}
                   />
 
                   {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
                   <button
                     onClick={() => removeNoField(index)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md z-10"
+                    className="flex items-center justify-center text-red-500 hover:text-red-700 hover:scale-110 transition bg-transparent border-none cursor-pointer p-2 pb-5"
                     title="Remove field"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
+                    <img src={DeleteIconSrc.src} alt="delete" className="w-5 h-5" />
                   </button>
                 </div>
               ))}
@@ -214,15 +213,15 @@ export default function CreatePage() {
           {/* CONFIRMATION MESSAGES */}
           <div>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
-              <label className="text-lg font-bold text-green-600">Confirmation Steps 🥺</label>
+              <label className="text-lg font-bold text-green-600">"Yes" button clicked messages 🥺</label>
               
               {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-green-50 px-3 py-1.5 rounded-full border border-green-100 hover:bg-green-100 transition">
+              <label className="flex items-center gap-2 cursor-pointer bg-green-50 px-3 py-1.5 rounded-full border border-green-100 hover:bg-green-100 transition pt-2">
                 <input 
                   type="checkbox" 
                   checked={removeDefaultsConf} 
                   onChange={e => setRemoveDefaultsConf(e.target.checked)}
-                  className="accent-green-500 w-4 h-4"
+                  className="w-5 h-5 accent-green-500 rounded-md"
                 />
                 <span className="text-xs font-semibold text-green-600">Remove Default Strings (Use only mine)</span>
               </label>
@@ -230,27 +229,23 @@ export default function CreatePage() {
 
             <div className="space-y-3">
               {confirmations.map((text, index) => (
-                <div key={index} className="flex gap-3 items-center">
+                <div key={index} className="flex gap-2 items-center">
                    <span className="text-xs text-gray-400 font-mono text-center min-w-[1.5rem]">{index + 1}.</span>
-                  <div className="relative flex-1">
-                    <input
-                      value={text}
-                      onChange={(e) => handleConfChange(index, e.target.value)}
-                      placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
-                      className="w-full p-3 pr-12 border border-gray-300 rounded-xl focus:border-green-400 focus:ring-2 focus:ring-green-100 outline-none transition"
-                    />
+                  <input
+                    value={text}
+                    onChange={(e) => handleConfChange(index, e.target.value)}
+                    placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
+                    className="flex-1 p-3 border border-gray-300 rounded-xl focus:border-green-400 focus:ring-2 focus:ring-green-100 outline-none transition"
+                  />
                     
-                    {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
-                    <button 
-                      onClick={() => removeConfField(index)} 
-                      className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-red-500 text-white hover:bg-red-600 transition shadow-md z-10"
-                      title="Remove step"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
+                  {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
+                  <button 
+                    onClick={() => removeConfField(index)} 
+                    className="flex items-center justify-center text-red-500 hover:text-red-700 hover:scale-110 transition bg-transparent border-none cursor-pointer p-2 pb-5"
+                    title="Remove step"
+                  >
+                    <img src={DeleteIconSrc.src} alt="delete" className="w-5 h-5" />
+                  </button>
                 </div>
               ))}
               <button onClick={addConfField} className="add-line-btn text-sm text-green-500 font-bold hover:underline">+ Add Step</button>
@@ -260,25 +255,25 @@ export default function CreatePage() {
 
         {/* SECTION 3: IMAGES */}
         <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-6">
-          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">3. Upload Images (Optional)</h2>
+          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">3. Upload Gifs or Images (Optional)</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">Mid/Start Bear 🐻</label>
+              <label className="block text-sm font-semibold text-slate-600">Mid/Start Gif 🐻</label>
               <input type="file" onChange={e => setMidBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-pink-50 file:text-pink-700 file:font-medium hover:file:bg-pink-100 transition cursor-pointer flex-1"/>
             </div>
             <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">Yes Bear ✅</label>
+              <label className="block text-sm font-semibold text-slate-600">Yes Gif ✅</label>
               <input type="file" onChange={e => setYesBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-50 file:text-green-700 file:font-medium hover:file:bg-green-100 transition cursor-pointer flex-1"/>
             </div>
             <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">No Bear ❌</label>
+              <label className="block text-sm font-semibold text-slate-600">No Gif ❌</label>
               <input type="file" onChange={e => setNoBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-red-50 file:text-red-700 file:font-medium hover:file:bg-red-100 transition cursor-pointer flex-1"/>
             </div>
           </div>
         </div>
 
         <button onClick={handleSubmit} disabled={loading} className="w-full bg-gradient-to-r from-[#ff5fa2] to-[#ff7fb5] hover:from-[#e04f8e] hover:to-[#e6709f] text-white font-bold text-xl py-4 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 disabled:opacity-75 disabled:cursor-not-allowed">
-          {loading ? "Generating Your Link..." : "Create Link 🚀"}
+          {loading ? "Processing..." : "Confirm order and pay 💳"}
         </button>
       </div>
     </div>

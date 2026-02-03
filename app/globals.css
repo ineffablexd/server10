@@ -5,7 +5,7 @@
 @tailwind utilities;
 
 :root {
-  --pink: #ff5fa2;
+  --pink: #ff8888;
   --dark: #1f1f1f;
 }
 
@@ -78,7 +78,7 @@ input::placeholder {
 input {
   color: #111;
   font-size: 16px;
-  border: 2px solid #ff5fa2;
+  border: 2px solid #ff8888;
   background: #fff;
 }
 
@@ -89,7 +89,7 @@ label {
 textarea {
   font-family: "Poppins", sans-serif;
   font-size: 16px;
-  border: 2px solid #ff5fa2;
+  border: 2px solid #ff8888;
   background: #fff;
   resize: vertical;
   min-height: 100px;
@@ -97,8 +97,8 @@ textarea {
 
 .add-line-btn {
   background: white;
-  color: #ff5fa2;
-  border: 2px solid #ff5fa2;
+  color: #ff8888;
+  border: 2px solid #ff8888;
   padding: 14px 28px;
   border-radius: 999px;
   font-size: 16px;
