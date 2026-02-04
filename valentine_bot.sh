@@ -95,13 +95,24 @@ watch_users() {
     inotifywait -e create --format '%f' "$DATA_DIR" 2>/dev/null | while read folder
     do
       if [ -d "$DATA_DIR/$folder" ]; then
-        send_msg_async "🆕 New user found: $folder"
+
+        MSG="🆕 New user uploaded
+
+Folder:
+\`$folder\`
+
+Generate command:
+\`/generate $folder\`"
+
+        send_msg_async "$MSG"
         log "New user: $folder"
+
       fi
     done
     sleep 2
   done
 }
+
 
 #################################
 # TELEGRAM LOOP
