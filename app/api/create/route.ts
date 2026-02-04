@@ -92,6 +92,21 @@ export async function POST(req: Request) {
     // Get the arrays the user submitted
     const answersNoInput = JSON.parse((formData.get("answers_no") as string) || "[]");
     const confirmationsInput = JSON.parse((formData.get("confirmation_messages") as string) || "[]");
+    
+    // Get the remove defaults flags
+    const removeDefaultsNo = formData.get("remove_defaults_no") === "true";
+    const removeDefaultsConf = formData.get("remove_defaults_conf") === "true";
+
+    // --- VALIDATION: Minimum 3 strings if removeDefaults is true ---
+    const nonEmptyAnswersNo = answersNoInput.filter((msg: string) => msg && msg.trim() !== "");
+    const nonEmptyConfirmations = confirmationsInput.filter((msg: string) => msg && msg.trim() !== "");
+
+    if (removeDefaultsNo && nonEmptyAnswersNo.length < 3) {
+      return NextResponse.json({ error: '"No" messages: Please provide at least 3 custom strings when removing defaults' }, { status: 400 });
+    }
+    if (removeDefaultsConf && nonEmptyConfirmations.length < 3) {
+      return NextResponse.json({ error: '"Yes" messages: Please provide at least 3 custom strings when removing defaults' }, { status: 400 });
+    }
 
     // --- 2. MERGE LOGIC ---
     
@@ -99,37 +114,50 @@ export async function POST(req: Request) {
     const processedDefaultsNo = DEFAULTS.answers_no.map(s => s.replace(/{name}/g, nameInput));
     const processedDefaultsConf = DEFAULTS.confirmation_messages.map(s => s.replace(/{name}/g, nameInput));
 
-    // B. OVERLAY Logic: 
-    // Start with a copy of the full default list
-    const finalAnswersNo = [...processedDefaultsNo];
-    const finalConfirmations = [...processedDefaultsConf];
+    // B. MERGE Logic based on removeDefaults flags
+    let finalAnswersNo: string[] = [];
+    let finalConfirmations: string[] = [];
 
-    // Loop through user input and overwrite the specific index
-    // If user provided 2 items, we overwrite index 0 and 1. Index 2+ remains Default.
-    if (answersNoInput.length > 0) {
-      answersNoInput.forEach((msg: string, index: number) => {
-        if (msg && msg.trim() !== "") {
-          // If index is within bounds, replace it
-          if (index < finalAnswersNo.length) {
-            finalAnswersNo[index] = msg;
-          } else {
-            // If user added MORE lines than we have defaults, append them
-            finalAnswersNo.push(msg);
+    // For answersNo
+    if (removeDefaultsNo) {
+      // REMOVE: Use ONLY user strings, filter out empty ones
+      finalAnswersNo = answersNoInput.filter((msg: string) => msg && msg.trim() !== "");
+    } else {
+      // REPLACE: Replace only as many defaults as user provided, keep the rest
+      finalAnswersNo = [...processedDefaultsNo];
+      if (answersNoInput.length > 0) {
+        answersNoInput.forEach((msg: string, index: number) => {
+          if (msg && msg.trim() !== "") {
+            // If index is within bounds, replace it
+            if (index < finalAnswersNo.length) {
+              finalAnswersNo[index] = msg;
+            } else {
+              // If user added MORE lines than we have defaults, append them
+              finalAnswersNo.push(msg);
+            }
           }
-        }
-      });
+        });
+      }
     }
 
-    if (confirmationsInput.length > 0) {
-      confirmationsInput.forEach((msg: string, index: number) => {
-        if (msg && msg.trim() !== "") {
-          if (index < finalConfirmations.length) {
-            finalConfirmations[index] = msg;
-          } else {
-            finalConfirmations.push(msg);
+    // For confirmations
+    if (removeDefaultsConf) {
+      // REMOVE: Use ONLY user strings, filter out empty ones
+      finalConfirmations = confirmationsInput.filter((msg: string) => msg && msg.trim() !== "");
+    } else {
+      // REPLACE: Replace only as many defaults as user provided, keep the rest
+      finalConfirmations = [...processedDefaultsConf];
+      if (confirmationsInput.length > 0) {
+        confirmationsInput.forEach((msg: string, index: number) => {
+          if (msg && msg.trim() !== "") {
+            if (index < finalConfirmations.length) {
+              finalConfirmations[index] = msg;
+            } else {
+              finalConfirmations.push(msg);
+            }
           }
-        }
-      });
+        });
+      }
     }
 
     // --- 3. STRINGS ---

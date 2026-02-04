@@ -87,6 +87,22 @@ export default function CreatePage() {
   // --- SUBMIT ---
   async function handleSubmit() {
     if (!name) return alert("Please enter the name!");
+
+    // Validation: If defaults are removed, ensure at least 3 custom entries exist
+    if (removeDefaultsNo) {
+      const validNo = answersNo.filter((s) => s.trim() !== "");
+      if (validNo.length < 3) {
+        return alert("Please add at least 3 custom 'No' messages if you remove defaults!");
+      }
+    }
+
+    if (removeDefaultsConf) {
+      const validConf = confirmations.filter((s) => s.trim() !== "");
+      if (validConf.length < 3) {
+        return alert("Please add at least 3 custom confirmation steps if you remove defaults!");
+      }
+    }
+
     setLoading(true);
 
     try {
