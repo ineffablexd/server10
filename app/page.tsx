@@ -1,81 +1,91 @@
-"use client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-red-100 flex flex-col items-center justify-center p-6 font-sans">
-      <div className="floating-hearts" />
+    // 1. Main Container (Centered Vertically & Horizontally)
+    <main className="container" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
       
-      <div className="max-w-2xl mx-auto text-center space-y-8">
-        {/* Main Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border-2 border-pink-200 p-8 space-y-8">
+      <div style={{ width: '100%', maxWidth: '800px' }}>
+        
+        {/* 2. Header Title */}
+        <div style={{ marginBottom: '30px', textAlign: 'center' }}>
+          <h1>Valentine Links 💖</h1>
+          <h2>
+            Create personalized valentine links for your boyfriend and girlfriend
+          </h2>
+        </div>
+
+        {/* 3. Main Glass Card */}
+        <div className="glass-section" style={{ padding: '40px 30px', textAlign: 'center' }}>
           
-          {/* Header */}
-          <div className="space-y-3">
-            <h1 className="text-5xl md:text-7xl font-extrabold text-[#ff5fa2] drop-shadow-sm font-serif">
-              Valentine Links 💖
-            </h1>
-            <p className="text-xl md:text-2xl text-slate-600 font-medium">
-              Create personalized valentine links for your boyfriend and girlfriend
-            </p>
-          </div>
-
-          {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-6">
-            {/* Card 1 */}
-            <div className="bg-gradient-to-br from-pink-50 to-red-50 p-6 rounded-2xl border border-pink-200 space-y-2">
-              <div className="text-4xl mb-2">👦🏻</div>
-              <h3 className="text-lg font-bold text-slate-700">For Him</h3>
-              <p className="text-sm text-slate-600">Create a cute link to impress your boyfriend with personalized messages</p>
-            </div>
-
-            {/* Card 2 */}
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-2xl border border-purple-200 space-y-2">
-              <div className="text-4xl mb-2">👧🏻</div>
-              <h3 className="text-lg font-bold text-slate-700">For Her</h3>
-              <p className="text-sm text-slate-600">Make her smile with an interactive and romantic valentine link</p>
-            </div>
-          </div>
-
-          {/* Testimonial/Quote Section */}
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg space-y-3">
-            <p className="text-lg italic font-medium text-slate-700">
-              "Make Valentine's Day special with a personalized link that shows how much they mean to you! ❤️"
-            </p>
-            <p className="text-sm text-slate-600">- Impress your special someone today</p>
-          </div>
-
-          {/* Pricing Section */}
-          <div className="text-center space-y-2 bg-gradient-to-r from-pink-50 to-red-50 p-6 rounded-2xl border-2 border-pink-200">
-            <div className="flex items-center justify-center gap-4">
-              <span className="text-2xl line-through text-slate-400 font-semibold">₹250</span>
-              <span className="text-4xl font-extrabold text-[#ff5fa2]">₹99</span>
-            </div>
-            <p className="text-sm text-slate-600 font-medium">Special Offer - Get Your Link Now</p>
-          </div>
-
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 pt-4">
-            <Link 
-              href="/create"
-              className="flex-1 bg-gradient-to-r from-[#ff5fa2] to-red-500 hover:from-[#e04f8e] hover:to-red-600 text-white font-bold py-4 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-lg active:scale-95"
-            >
-              🎨 Create Your Link
+          {/* --- SELECTION CARDS --- */}
+          <div className="cards" style={{ marginBottom: '30px' }}>
+            {/* Card 1: For Him */}
+            <Link href="/create?type=him" className="card">
+              <div style={{ fontSize: "3.5rem", marginBottom: '10px' }}>👦</div>
+              <h4>For Him</h4>
+              <p>
+                Create a cute link to impress your boyfriend with personalized messages.
+              </p>
             </Link>
-            <button 
-              onClick={() => window.open('https://ineffablexd.github.io/valentine/', '_blank')}
-              className="flex-1 bg-white border-2 border-[#ff5fa2] text-[#ff5fa2] hover:bg-pink-50 font-bold py-4 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-lg active:scale-95"
-            >
-              👀 See Example
-            </button>
+
+            {/* Card 2: For Her */}
+            <Link href="/create?type=her" className="card">
+              <div style={{ fontSize: "3.5rem", marginBottom: '10px' }}>👧</div>
+              <h4>For Her</h4>
+              <p>
+                Make her smile with an interactive and romantic valentine link.
+              </p>
+            </Link>
           </div>
 
-          {/* Info Box */}
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg space-y-1">
-            <p className="text-sm text-yellow-900 font-medium">
-              ✨ <strong>Limited Time Offer:</strong> Get your personalized valentine link for just ₹99 today!
+          {/* --- QUOTE SECTION --- */}
+          <blockquote style={{ margin: '30px 0' }}>
+            "Make Valentine’s Day special with a personalized link that shows how
+            much they mean to you! ❤️"
+            <div style={{ marginTop: "10px", fontSize: "0.85rem", fontStyle: "normal", opacity: 0.7, fontWeight: '600' }}>
+              - Impress your special someone today
+            </div>
+          </blockquote>
+
+          {/* --- PRICING SECTION --- */}
+          <div className="price-box" style={{ marginBottom: '30px', padding: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+              <span className="old-price" style={{ textDecoration: 'line-through', color: '#94a3b8', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                ₹250
+              </span>
+              <span className="new-price" style={{ color: '#db2777', fontSize: '2.5rem', fontWeight: '900', fontFamily: 'var(--font-baloo)' }}>
+                ₹99
+              </span>
+            </div>
+            <p style={{ color: "#db2777", fontWeight: "700", marginTop: '5px', textTransform: 'uppercase', fontSize: '0.9rem' }}>
+              ✨ Limited Time Offer: Get your link today!
             </p>
+          </div>
+
+          {/* --- ACTION BUTTONS --- */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            
+            {/* Primary: Create Link */}
+            <Link href="/create" style={{ width: '100%' }}>
+              <button className="big-btn">
+                🚀 Create Your Link Now
+              </button>
+            </Link>
+
+            {/* Secondary: See Sample */}
+            <a 
+              href="https://ineffablexd.github.io/valentine/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              style={{ width: '100%', textDecoration: 'none' }}
+            >
+              {/* CSS Class handles the hover effect now */}
+              <button className="sample-btn">
+                👀 See Sample Link
+              </button>
+            </a>
+            
           </div>
 
         </div>

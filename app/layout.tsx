@@ -1,23 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Dancing_Script, Pacifico } from "next/font/google";
+import { Baloo_2, Poppins } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+// 1. Load Baloo 2 for Headings
+const baloo = Baloo_2({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["600", "700", "800"],
+  variable: "--font-baloo",
   display: "swap",
 });
 
-const dancingScript = Dancing_Script({
+// 2. Load Poppins for Body text
+const poppins = Poppins({
   subsets: ["latin"],
-  variable: "--font-dancing",
-  display: "swap",
-});
-
-const pacifico = Pacifico({
-  subsets: ["latin"],
-  weight: "400",
-  variable: "--font-pacifico",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
   display: "swap",
 });
 
@@ -33,9 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${dancingScript.variable} ${pacifico.variable} bg-pink-50 text-slate-800`}
-      >
+      <body className={`${baloo.variable} ${poppins.variable}`}>
         {children}
       </body>
     </html>

@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import DeleteIconSrc from "./delete.svg";
+import Image from "next/image";
+import DeleteIconSrc from "./delete.svg"; // Ensure you have this icon or remove the import if using text
 
-// --- DEFAULT DATA FOR HINTS ---
+// --- DEFAULT DATA ---
 const DEFAULT_NO_ANSWERS = [
   "No, {name} 😔",
   "Are you sure, {name}?",
@@ -35,25 +36,22 @@ export default function CreatePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  // --- 1. Basic Info States ---
+  // --- States ---
   const [name, setName] = useState("");
   const [title, setTitle] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  // --- 2. Dynamic List States ---
   const [answersNo, setAnswersNo] = useState<string[]>([""]);
   const [confirmations, setConfirmations] = useState<string[]>([""]);
 
-  // --- 3. Toggles (New Feature) ---
   const [removeDefaultsNo, setRemoveDefaultsNo] = useState(false);
   const [removeDefaultsConf, setRemoveDefaultsConf] = useState(false);
 
-  // --- 4. File States ---
   const [midBanner, setMidBanner] = useState<File | null>(null);
   const [yesBanner, setYesBanner] = useState<File | null>(null);
   const [noBanner, setNoBanner] = useState<File | null>(null);
 
-  // --- HELPERS: List Management ---
+  // --- Helpers ---
   const handleNoChange = (index: number, value: string) => {
     const newArr = [...answersNo];
     newArr[index] = value;
@@ -84,23 +82,18 @@ export default function CreatePage() {
     return text.replace(/{name}/g, name || "Shrija"); 
   };
 
-  // --- SUBMIT ---
+  // --- Submit Logic ---
   async function handleSubmit() {
     if (!name) return alert("Please enter the name!");
 
-    // Validation: If defaults are removed, ensure at least 3 custom entries exist
     if (removeDefaultsNo) {
       const validNo = answersNo.filter((s) => s.trim() !== "");
-      if (validNo.length < 3) {
-        return alert("Please add at least 3 custom 'No' messages if you remove defaults!");
-      }
+      if (validNo.length < 3) return alert("Please add at least 3 custom 'No' messages if you remove defaults!");
     }
 
     if (removeDefaultsConf) {
       const validConf = confirmations.filter((s) => s.trim() !== "");
-      if (validConf.length < 3) {
-        return alert("Please add at least 3 custom confirmation steps if you remove defaults!");
-      }
+      if (validConf.length < 3) return alert("Please add at least 3 custom confirmation steps if you remove defaults!");
     }
 
     setLoading(true);
@@ -110,12 +103,9 @@ export default function CreatePage() {
       formData.append("name", name);
       formData.append("title", title);
       formData.append("success_message", successMessage);
-      
-      // Send the Toggle States
       formData.append("remove_defaults_no", removeDefaultsNo.toString());
       formData.append("remove_defaults_conf", removeDefaultsConf.toString());
 
-      // Pre-process Lists
       const processedNo = answersNo.map((text, index) => {
         if ((!text || text.trim() === "") && !removeDefaultsNo) {
           const def = DEFAULT_NO_ANSWERS[index] || "Please?";
@@ -150,148 +140,211 @@ export default function CreatePage() {
     }
   }
 
+  // --- Inline Styles for Consistency ---
+  // Using inline styles guarantees the look even if globals.css has conflicts
+  const inputStyle = {
+    width: "100%",
+    padding: "14px 18px",
+    borderRadius: "16px",
+    border: "2px solid #fce7f3",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    fontSize: "1rem",
+    marginTop: "8px",
+    outline: "none",
+    fontFamily: "inherit",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.02)"
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontWeight: "700",
+    color: "#4b5563",
+    marginBottom: "5px",
+    fontSize: "1.05rem"
+  };
+
   return (
-    <div className="min-h-screen bg-[#fff0f6] py-10 px-4 font-sans text-slate-800">
-      <div className="max-w-3xl mx-auto space-y-8">
-        
-        <div className="text-center space-y-3 mb-2">
-          <h1 className="text-5xl md:text-6xl font-extrabold text-[#ff5fa2] drop-shadow-sm font-serif leading-tight">
-            Customize Your Valentine 💖
-          </h1>
-          <p className="text-lg text-slate-600 font-medium">Make it personal, funny, and cute!</p>
-        </div>
-
-        {/* SECTION 1: DETAILS */}
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-6">
-          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">1. The Basics</h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-600">Partner's Name</label>
-              <input value={name} onChange={e => setName(e.target.value)} placeholder="e.g. Shrija" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition"/>
-            </div>
-            <div className="space-y-2">
-              <label className="block text-sm font-semibold text-slate-600">Page Title</label>
-              <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Default: I love you" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition"/>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <label className="block text-sm font-semibold text-slate-600">Success Message</label>
-            <textarea value={successMessage} onChange={e => setSuccessMessage(e.target.value)} placeholder="Default: Yippeee I Loveeee youuuuuuuuuuuuuu 🌹" className="w-full p-3 bg-pink-50 border border-pink-200 rounded-xl focus:ring-2 focus:ring-[#ff5fa2] outline-none transition h-24 resize-none"/>
-          </div>
-        </div>
-
-        {/* SECTION 2: MESSAGES */}
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-8">
-          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">2. Custom Messages</h2>
-          
-          {/* NO MESSAGES */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
-              <label className="text-lg font-bold text-red-500">"No" Button  Clicked Messages 😢</label>
-              
-              {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-red-50 px-3 py-1.5 rounded-full border border-red-100 hover:bg-red-100 transition pt-2">
-                <input
-                  type="checkbox"
-                  checked={removeDefaultsNo}
-                  onChange={e => setRemoveDefaultsNo(e.target.checked)}
-                  className="w-5 h-5 accent-red-500 rounded-md"
-                />
-                <span className="text-xs font-semibold text-red-600">Remove Default Strings (Use only mine)</span>
-              </label>
-            </div>
-            
-            <div className="space-y-3">
-              {answersNo.map((text, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                  <input
-                    type="text"
-                    value={text}
-                    onChange={(e) => handleNoChange(index, e.target.value)}
-                    className="flex-1 rounded-xl border border-gray-300 px-4 py-3 focus:border-pink-400 focus:ring-2 focus:ring-pink-100 outline-none transition"
-                    placeholder={getPlaceholder(DEFAULT_NO_ANSWERS, index)}
-                  />
-
-                  {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
-                  <button
-                    onClick={() => removeNoField(index)}
-                    className="flex items-center justify-center text-red-500 hover:text-red-700 hover:scale-110 transition bg-transparent border-none cursor-pointer p-2 pb-5"
-                    title="Remove field"
-                  >
-                    <img src={DeleteIconSrc.src} alt="delete" className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
-              <button onClick={addNoField} className="add-line-btn text-sm text-pink-500 font-bold hover:underline">+ Add Line</button>
-            </div>
-          </div>
-
-          {/* CONFIRMATION MESSAGES */}
-          <div>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 gap-3">
-              <label className="text-lg font-bold text-green-600">"Yes" button clicked messages 🥺</label>
-              
-              {/* TOGGLE SWITCH */}
-              <label className="flex items-center gap-2 cursor-pointer bg-green-50 px-3 py-1.5 rounded-full border border-green-100 hover:bg-green-100 transition pt-2">
-                <input 
-                  type="checkbox" 
-                  checked={removeDefaultsConf} 
-                  onChange={e => setRemoveDefaultsConf(e.target.checked)}
-                  className="w-5 h-5 accent-green-500 rounded-md"
-                />
-                <span className="text-xs font-semibold text-green-600">Remove Default Strings (Use only mine)</span>
-              </label>
-            </div>
-
-            <div className="space-y-3">
-              {confirmations.map((text, index) => (
-                <div key={index} className="flex gap-2 items-center">
-                   <span className="text-xs text-gray-400 font-mono text-center min-w-[1.5rem]">{index + 1}.</span>
-                  <input
-                    value={text}
-                    onChange={(e) => handleConfChange(index, e.target.value)}
-                    placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
-                    className="flex-1 p-3 border border-gray-300 rounded-xl focus:border-green-400 focus:ring-2 focus:ring-green-100 outline-none transition"
-                  />
-                    
-                  {/* --- UPDATED DELETE BUTTON (Trash Icon) --- */}
-                  <button 
-                    onClick={() => removeConfField(index)} 
-                    className="flex items-center justify-center text-red-500 hover:text-red-700 hover:scale-110 transition bg-transparent border-none cursor-pointer p-2 pb-5"
-                    title="Remove step"
-                  >
-                    <img src={DeleteIconSrc.src} alt="delete" className="w-5 h-5" />
-                  </button>
-                </div>
-              ))}
-              <button onClick={addConfField} className="add-line-btn text-sm text-green-500 font-bold hover:underline">+ Add Step</button>
-            </div>
-          </div>
-        </div>
-
-        {/* SECTION 3: IMAGES */}
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-pink-100 space-y-6">
-          <h2 className="text-2xl font-bold text-slate-700 border-b-2 border-pink-200 pb-3">3. Upload Gifs or Images (Optional)</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">Mid/Start Gif 🐻</label>
-              <input type="file" onChange={e => setMidBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-pink-50 file:text-pink-700 file:font-medium hover:file:bg-pink-100 transition cursor-pointer flex-1"/>
-            </div>
-            <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">Yes Gif ✅</label>
-              <input type="file" onChange={e => setYesBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-green-50 file:text-green-700 file:font-medium hover:file:bg-green-100 transition cursor-pointer flex-1"/>
-            </div>
-            <div className="space-y-3 flex flex-col">
-              <label className="block text-sm font-semibold text-slate-600">No Gif ❌</label>
-              <input type="file" onChange={e => setNoBanner(e.target.files?.[0] || null)} className="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:bg-red-50 file:text-red-700 file:font-medium hover:file:bg-red-100 transition cursor-pointer flex-1"/>
-            </div>
-          </div>
-        </div>
-
-        <button onClick={handleSubmit} disabled={loading} className="w-full bg-gradient-to-r from-[#ff5fa2] to-[#ff7fb5] hover:from-[#e04f8e] hover:to-[#e6709f] text-white font-bold text-xl py-4 rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 disabled:opacity-75 disabled:cursor-not-allowed">
-          {loading ? "Processing..." : "Confirm order and pay 💳"}
-        </button>
+    <div className="container">
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: "40px" }}>
+        <h1>Customize Your Valentine 💖</h1>
+        <h2>Make it personal, funny, and cute!</h2>
       </div>
+
+      {/* 1. THE BASICS */}
+      <div className="glass-section" style={{ marginBottom: "30px" }}>
+        <h3>1. The Basics</h3>
+        
+        <div className="grid gap-6 md:grid-cols-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginBottom: '20px' }}>
+          <div>
+            <label style={labelStyle}>Partner's Name</label>
+            <input 
+              style={inputStyle}
+              value={name} 
+              onChange={e => setName(e.target.value)} 
+              placeholder="e.g. Shrija" 
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Page Title</label>
+            <input 
+              style={inputStyle}
+              value={title} 
+              onChange={e => setTitle(e.target.value)} 
+              placeholder="Default: I love you" 
+            />
+          </div>
+        </div>
+
+        <div>
+          <label style={labelStyle}>Success Message</label>
+          <textarea 
+            style={{ ...inputStyle, minHeight: "100px", resize: "vertical" }}
+            value={successMessage} 
+            onChange={e => setSuccessMessage(e.target.value)} 
+            placeholder="Default: Yippeee I Loveeee youuuuuuuuuuuuuu 🌹" 
+          />
+        </div>
+      </div>
+
+      {/* 2. CUSTOM MESSAGES */}
+      <div className="glass-section" style={{ marginBottom: "30px" }}>
+        <h3>2. Custom Messages</h3>
+        
+        {/* No Messages Section */}
+        <div style={{ marginBottom: "35px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", flexWrap: "wrap", gap: "10px" }}>
+            <label style={{ ...labelStyle, color: "#ef4444", marginBottom: 0 }}>
+              "No" Button Messages 😢
+            </label>
+            
+            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", background: "#fef2f2", padding: "8px 16px", borderRadius: "50px", border: "1px solid #fee2e2" }}>
+              <input
+                type="checkbox"
+                checked={removeDefaultsNo}
+                onChange={e => setRemoveDefaultsNo(e.target.checked)}
+                // FIXED: Removed duplicate 'width' property
+                style={{ width: "18px", height: "18px", accentColor: "#ef4444", cursor: "pointer" }}
+              />
+              <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "#dc2626" }}>Remove Defaults</span>
+            </label>
+          </div>
+          
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {answersNo.map((text, index) => (
+              <div key={index} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <input
+                  type="text"
+                  value={text}
+                  onChange={(e) => handleNoChange(index, e.target.value)}
+                  placeholder={getPlaceholder(DEFAULT_NO_ANSWERS, index)}
+                  style={{ ...inputStyle, marginTop: 0 }}
+                />
+                <button
+                  onClick={() => removeNoField(index)}
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}
+                  title="Remove"
+                >
+                  <Image src={DeleteIconSrc} alt="delete" width={24} height={24} />
+                </button>
+              </div>
+            ))}
+            <button 
+              onClick={addNoField} 
+              className="add-line-btn" 
+              style={{ color: "#ef4444", borderColor: "#fca5a5", marginTop: "10px", alignSelf: "flex-start" }}
+            >
+              + Add Line
+            </button>
+          </div>
+        </div>
+
+        {/* Yes Messages Section */}
+        <div>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px", flexWrap: "wrap", gap: "10px" }}>
+            <label style={{ ...labelStyle, color: "#16a34a", marginBottom: 0 }}>
+              "Yes" Button Messages 🥺
+            </label>
+            
+            <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", background: "#f0fdf4", padding: "8px 16px", borderRadius: "50px", border: "1px solid #dcfce7" }}>
+              <input 
+                type="checkbox" 
+                checked={removeDefaultsConf} 
+                onChange={e => setRemoveDefaultsConf(e.target.checked)}
+                style={{ width: "18px", height: "18px", accentColor: "#16a34a", cursor: "pointer" }}
+              />
+              <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "#16a34a" }}>Remove Defaults</span>
+            </label>
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            {confirmations.map((text, index) => (
+              <div key={index} style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                <span style={{ fontSize: "0.9rem", color: "#9ca3af", fontFamily: "monospace", width: "20px", textAlign: "center" }}>
+                  {index + 1}.
+                </span>
+                <input
+                  value={text}
+                  onChange={(e) => handleConfChange(index, e.target.value)}
+                  placeholder={getPlaceholder(DEFAULT_CONFIRMATIONS, index)}
+                  style={{ ...inputStyle, marginTop: 0 }}
+                />
+                <button 
+                  onClick={() => removeConfField(index)} 
+                  style={{ background: "none", border: "none", cursor: "pointer", padding: "8px" }}
+                  title="Remove"
+                >
+                  <Image src={DeleteIconSrc} alt="delete" width={24} height={24} />
+                </button>
+              </div>
+            ))}
+            <button 
+              onClick={addConfField} 
+              className="add-line-btn" 
+              style={{ color: "#16a34a", borderColor: "#86efac", marginTop: "10px", alignSelf: "flex-start" }}
+            >
+              + Add Step
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* 3. IMAGES */}
+      <div className="glass-section" style={{ marginBottom: "40px" }}>
+        <h3>3. Upload Gifs or Images (Optional)</h3>
+        
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+          <div>
+            <label style={labelStyle}>Mid/Start Gif 🐻</label>
+            <input 
+              type="file" 
+              onChange={e => setMidBanner(e.target.files?.[0] || null)} 
+              style={{ ...inputStyle, padding: "10px", fontSize: "0.9rem" }}
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>Yes Gif ✅</label>
+            <input 
+              type="file" 
+              onChange={e => setYesBanner(e.target.files?.[0] || null)} 
+              style={{ ...inputStyle, padding: "10px", fontSize: "0.9rem", borderColor: "#dcfce7" }}
+            />
+          </div>
+          <div>
+            <label style={labelStyle}>No Gif ❌</label>
+            <input 
+              type="file" 
+              onChange={e => setNoBanner(e.target.files?.[0] || null)} 
+              style={{ ...inputStyle, padding: "10px", fontSize: "0.9rem", borderColor: "#fee2e2" }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button onClick={handleSubmit} disabled={loading} className="big-btn">
+        {loading ? "Processing..." : "Confirm order and pay 💳"}
+      </button>
     </div>
   );
 }
