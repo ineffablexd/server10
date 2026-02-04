@@ -5,17 +5,20 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   variable: "--font-dancing",
+  display: "swap",
 });
 
 const pacifico = Pacifico({
-  weight: "400",
   subsets: ["latin"],
+  weight: "400",
   variable: "--font-pacifico",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -31,13 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`
-          ${inter.variable}
-          ${dancingScript.variable}
-          ${pacifico.variable}
-          bg-pink-50
-          text-slate-800
-        `}
+        className={`${inter.variable} ${dancingScript.variable} ${pacifico.variable} bg-pink-50 text-slate-800`}
       >
         {children}
       </body>
